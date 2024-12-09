@@ -1,0 +1,45 @@
+function primMST(graph, n)
+    key = ones(1, n) * %inf;
+    parent = zeros(1, n);
+    key(1) = 0;
+    mstSet = zeros(1, n);
+    
+    for i = 1:n
+        u = minKey(key, mstSet, n);
+        mstSet(u) = 1;
+        
+        for v = 1:n
+            if graph(u, v) ~= 0 & mstSet(v) == 0 & graph(u, v) < key(v) then
+                key(v) = graph(u, v);
+                parent(v) = u;
+            end
+        end
+    end
+    
+    disp("Edges in MST:");
+    for i = 2:n
+        printf("%d - %d : %d\n", parent(i), i, graph(i, parent(i)));
+    end
+endfunction
+
+function u = minKey(key, mstSet, n)
+    min = %inf;
+    u = 0;
+    for v = 1:n
+        if mstSet(v) == 0 & key(v) < min then
+            min = key(v);
+            u = v;
+        end
+    end
+endfunction
+
+graph = [
+    0, 2, 0, 6, 0, 0;
+    2, 0, 3, 8, 5, 0;
+    0, 3, 0, 0, 7, 0;
+    6, 8, 0, 0, 9, 0;
+    0, 5, 7, 9, 0, 4;
+    0, 0, 0, 0, 4, 0
+];
+n = 6;
+primMST(graph, n);
